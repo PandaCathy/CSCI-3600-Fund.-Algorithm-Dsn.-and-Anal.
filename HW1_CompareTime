@@ -1,0 +1,161 @@
+#include <cstdlib> 
+#include <ctime> 
+#include <iostream>
+#include <chrono> 
+
+using namespace std;
+
+/*
+Cathy Fung
+CSCI 3600-HW1
+21 October 2019
+This is a C++ program to compare time between insertion sort and merge sort of the random array which the size inputted by user.
+*/
+
+// Function to sort the array by insertion sort
+void InsertionSort(int A[], int N){
+    int i, j, key;
+    for (j=1; j<N; j++){
+        key = A[j];
+        i = j-1;
+        
+        // Check if the left adjacent element is greater than current element
+        while (i>=0 and A[i]>key){
+            //move the left element to one position forward
+            A[i+1] = A[i];
+            i = i-1;
+        }
+        // Move the current element to the correct position
+        A[i+1] = key;
+    }
+}
+
+// Merges two subarrays of A[], the first subarray is arr[p..q] and the second subarray is arr[p+1..r] 
+void Merge (int A[], int p, int q, int r)
+{
+    int i,j,k;
+    int n1 = q-p+1;
+    int n2 = r-q;
+    
+    int L[n1], R[n2];
+    
+    // Copy the date to L[] and R[]
+    for (i=0; i<n1; i++){
+        L[i] = A[p+i];
+    }
+    for (j=0; j<n2; j++){
+        R[j] = A[q+j+1];
+    }
+    
+    i = 0;
+    j = 0;
+    k = p;
+    
+    while (i < n1 && j < n2) 
+    { 
+        if (L[i] <= R[j]) 
+        { 
+            A[k] = L[i]; 
+            i++; 
+        } 
+        else
+        { 
+            A[k] = R[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+  
+    while (i < n1) 
+    { 
+        A[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+  
+    while (j < n2) 
+    { 
+        A[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
+}
+
+void MergeSort(int A[], int p, int r)
+{ 
+    if (p < r) 
+    { 
+        int q = p+(r-p)/2; 
+  
+        MergeSort(A, p, q); 
+        MergeSort(A, q+1, r); 
+  
+        Merge(A, p, q, r); 
+    } 
+} 
+
+void printArray(int A[], int N)  
+{  
+    int i;  
+    for (i=0; i<N; i++) {
+         cout << A[i] << " ";  
+    }
+    cout << endl; 
+}  
+
+int main()
+{
+    int size;
+    // Ask user to input the size of the array
+    cout << "What is the size of the array?" << endl;
+    cin >> size;
+    
+    int array[size];
+    int array1[size];
+    srand((unsigned)time(0)); 
+    for(int i=0; i<size; i++){ 
+        // Randomizer number between 0 and 1 and put into the array
+        array[i] = (rand()%2); 
+        // Copy the first array
+        array1[i] = array[i];
+    }
+    
+    // Print out original array
+    cout << "Original array:" << endl;
+    printArray(array,size);
+    
+    // Using time point and system_clock to calculate the time insertion sort took to sort 
+    std::chrono::time_point<std::chrono::system_clock> start, end; 
+    // Start the counting the time of insertion sort
+    start = std::chrono::system_clock::now(); 
+    // Sort the array by insertion sort
+    InsertionSort(array, size);
+    // Stop counting the time of insertion sort
+    end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start; 
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end); 
+    
+    // Print the array after insertion sort
+    cout << "Array after insertion sort:" << endl;
+    printArray(array,size);
+    // Print the time to sort the arry by using insertion sort
+    cout << "Elapsed time of insertion sort: " << elapsed_seconds.count() << "s" << endl;
+    
+    // Using time point and system_clock to calculate the time insertion sort took to sort 
+    std::chrono::time_point<std::chrono::system_clock> start1, end1; 
+    // Start the counting the time of insertion sort
+    start1 = std::chrono::system_clock::now(); 
+    // Sort the array by insertion sort
+    MergeSort(array1, 0, size-1);
+    // Stop counting the time of insertion sort
+    end1 = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed1_seconds = end1 - start1; 
+    
+    // Print the array after insertion sort
+    cout << "Array after merge sort:" << endl;
+    printArray(array1, size);
+    // Print the time to sort the arry by using insertion sort
+    cout << "Elapsed time of merge sort: " << elapsed1_seconds.count() << "s" << endl;
+    
+    return 0;
+}
