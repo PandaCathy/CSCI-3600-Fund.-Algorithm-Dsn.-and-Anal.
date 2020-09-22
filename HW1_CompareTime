@@ -1,16 +1,16 @@
-#include <cstdlib> 
-#include <ctime> 
-#include <iostream>
-#include <chrono> 
-
-using namespace std;
-
 /*
 Cathy Fung
 CSCI 3600-HW1
 21 October 2019
 This is a C++ program to compare time between insertion sort and merge sort of the random array which the size inputted by user.
 */
+
+#include <cstdlib> 
+#include <ctime> 
+#include <iostream>
+#include <chrono> 
+
+using namespace std;
 
 // Function to sort the array by insertion sort
 void InsertionSort(int A[], int N){
